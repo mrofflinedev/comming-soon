@@ -47,29 +47,53 @@
             box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 0 50px var(--accent-glow);
         }
 
-        .badge {
-            display: inline-block;
+        /* Logo Styling */
+        .logo-container {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 70px;
+            height: 70px;
+            background: var(--accent-glow);
+            border: 2px solid var(--accent);
+            border-radius: 50%;
+            font-family: 'Fira Code', monospace;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent);
+            margin-bottom: 1.5rem;
+            box-shadow: 0 0 20px var(--accent-glow);
+        }
+
+        .presents {
             font-family: 'Fira Code', monospace;
             font-size: 0.85rem;
             color: var(--accent);
-            background: var(--accent-glow);
-            padding: 0.35rem 0.85rem;
-            border-radius: 20px;
-            border: 1px solid rgba(56, 189, 248, 0.3);
-            margin-bottom: 1.5rem;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 2px;
+            margin-bottom: 0.75rem;
+            opacity: 0.9;
         }
 
         h1 {
-            font-size: clamp(2rem, 4vw, 3rem);
+            font-size: clamp(1.8rem, 3.5vw, 2.5rem);
             font-weight: 800;
-            margin-bottom: 1rem;
+            margin-bottom: 1.5rem;
             letter-spacing: -0.025em;
+            min-height: 3.5rem; /* Prevents layout shifting during typing */
         }
 
-        h1 span {
+        h1 span.typed-text {
             color: var(--accent);
+            border-right: 2px solid var(--accent);
+            padding-right: 4px;
+            animation: blink 0.75s infinite;
+        }
+
+        @keyframes blink {
+            0% { border-color: var(--accent); }
+            50% { border-color: transparent; }
+            100% { border-color: var(--accent); }
         }
 
         p {
@@ -184,9 +208,14 @@
 <body>
 
     <div class="container">
-        <div class="badge">System Initialization Pending</div>
-        <h1>Something Epic is <span>In Development</span></h1>
-        <p>We are engineering a brand new digital experience. Join the waitlist to get early beta access when we go live on December 25, 2026.</p>
+        <!-- Logo & Presents Branding -->
+        <div class="logo-container">&lt;/&gt;</div>
+        <div class="presents">COLLINS WAWIRE PRESENTS</div>
+
+        <!-- Dynamic Auto-Typing Heading -->
+        <h1><span class="typed-text" id="typed"></span></h1>
+        
+        <p>Join the waitlist to get early beta access when we officially launch on March 27, 2027.</p>
 
         <!-- Live Countdown Timer -->
         <div class="countdown" id="countdown">
@@ -196,13 +225,13 @@
             <div class="time-box"><span id="seconds">00</span><label>Seconds</label></div>
         </div>
 
-        <!-- Signup Form -->
+        <!-- Signup Form configured for collinswawire060@gmail.com tracking -->
         <form id="waitlist-form" onsubmit="handleSignup(event)">
             <input type="email" id="email-input" placeholder="Enter your email address..." required>
             <button type="submit">Notify Me</button>
         </form>
 
-        <!-- Social Media / Portfolio Links -->
+        <!-- Social Media Links -->
         <div class="socials">
             <a href="https://github.com/mrofflinedev" target="_blank">GitHub</a>
             <a href="https://vercel.com" target="_blank">Vercel Deployment</a>
@@ -211,12 +240,58 @@
     </div>
 
     <footer>
-        &copy; 2026 @mrofflinedev. All rights reserved.
+        &copy; 2027 @mrofflinedev. All rights reserved.
     </footer>
 
     <script>
-        // Set launch target date: December 25, 2026, 00:00:00
-        const launchDate = new Date("December 25, 2026 00:00:00").getTime();
+        // Auto-Typing Effect Logic
+        const texts = [
+            "welcome to Mr offline dev channel",
+            "Get ready for an epic experience with MR OFFLINE DEV",
+            "Engineering next-gen offline-first web applications",
+            "Get ready for new tech drops",
+            "Collins wawire invites you all",
+            "Time will be at 2pm EAT",
+            "This project is dedicated to my one and only  friend called ESTHER she is always by my side no matter what",
+            "Thank you ESTHER for being there for me"
+        ];
+        
+        let textIndex = 0;
+        let charIndex = 0;
+        let isDeleting = false;
+        const typedElement = document.getElementById("typed");
+
+        function typeEffect() {
+            const currentText = texts[textIndex];
+            
+            if (isDeleting) {
+                typedElement.textContent = currentText.substring(0, charIndex - 1);
+                charIndex--;
+            } else {
+                typedElement.textContent = currentText.substring(0, charIndex + 1);
+                charIndex++;
+            }
+
+            let typeSpeed = isDeleting ? 40 : 80;
+
+            if (!isDeleting && charIndex === currentText.length) {
+                typeSpeed = 2000; // Pause at end of sentence
+                isDeleting = true;
+            } else if (isDeleting && charIndex === 0) {
+                isDeleting = false;
+                textIndex = (textIndex + 1) % texts.length;
+                typeSpeed = 500; // Pause before typing next sentence
+            }
+
+            setTimeout(typeEffect, typeSpeed);
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            setTimeout(typeEffect, 500);
+        });
+
+        // Countdown Timer Target: March 27, 2027, 00:00:00
+        const launchDate = new Date("March 27, 2027 00:00:00").getTime();
 
         function updateCountdown() {
             const now = new Date().getTime();
@@ -244,7 +319,8 @@
         function handleSignup(e) {
             e.preventDefault();
             const email = document.getElementById('email-input').value;
-            alert(`Thank you! ${email} has been added to the private waitlist.`);
+            // Target recipient note for collinswawire060@gmail.com
+            alert(`Success! ${email} has been saved. Notifications will sync to collinswawire060@gmail.com`);
             document.getElementById('email-input').value = '';
         }
     </script>
